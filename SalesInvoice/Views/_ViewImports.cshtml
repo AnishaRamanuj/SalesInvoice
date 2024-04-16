@@ -1,0 +1,6 @@
+﻿@using SalesInvoice
+@using SalesInvoice.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await Component.InvokeAsync("Toastify")
+@RenderSection("Scripts", required: false)

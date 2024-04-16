@@ -1,0 +1,74 @@
+﻿@model List<SalesInvoiceModel>
+
+<h2>Invoice Details</h2>
+
+@if (TempData["DeleteError"] != null)
+{
+    <div class="alert alert-danger">@TempData["DeleteError"]</div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-Success">@TempData["Success"]</div>
+    <html>
+    <head>
+        <title>Thanks for your order!</title>
+    </head>
+    <body>
+        <h1>Thanks for your order!</h1>
+        <p>
+            We appreciate your business!
+            If you have any questions, please email
+            <a href="mailto:anisha98251@gmail.com">anisha98251@gmail.com</a>.
+        </p>
+    </body>
+    </html>
+}
+@if (TempData["PaymentMessage"] != null)
+{
+    <div class="alert alert-Success">@TempData["PaymentMessage"]</div>
+}
+@if (TempData["DeleteSuccess"] != null)
+{
+    <div class="alert alert-Success">@TempData["DeleteSuccess"]</div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th style="background-color:pink;">ID</th>
+            <th style="background-color:pink;">Code</th>
+            <th style="background-color:pink;">Date</th>
+            <th style="background-color:pink;">DueDays</th>
+            <th style="background-color:pink;">DueDate</th>
+            <th style="background-color:pink;">Party</th>
+            <th style="background-color:pink;">Item</th>
+            <th style="background-color:pink;">Qty</th>
+            <th style="background-color:pink;">Rate</th>
+            <th style="background-color:pink;">Amount</th>
+            <th style="background-color:pink;">Discount</th>
+            <th style="background-color:pink;">TotalAmount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var inv in Model)
+        {
+            <tr>
+                <td>@inv.Id</td>
+                <td>@inv.Code</td>
+                <td>@inv.Date</td>
+                <td>@inv.DueDays</td>
+                <td>@inv.DueDate</td>
+                <td>@inv.Party</td>
+                <td>@inv.Item</td>
+                <td>@inv.Qty</td>
+                <td>@inv.Rate</td>
+                <td>@inv.Amount</td>
+                <td>@inv.Discount</td>
+                <td>@inv.TotalAmount</td>
+                <td>
+                    <a href="@Url.Action("DeleteInvoice", "SalesInvoice", new { inv.Id })" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                </td>
+              
+            </tr>
+        }
+    </tbody>
+</table>

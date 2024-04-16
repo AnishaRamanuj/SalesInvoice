@@ -1,0 +1,125 @@
+﻿@model SalesInvoiceModel
+<h2>Create Invoice</h2>
+<form action="/create-checkout-session" method="POST">
+    @using (Html.BeginForm("CreateCheckoutSession", "Payments", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    @Html.HiddenFor(m => m.Id)
+    <div class="form-group">
+        <label asp-for="Code"></label>
+        <input asp-for="Code" class="form-control" />
+        <span asp-validation-for="Code" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Date"></label>
+        <input asp-for="Date" class="form-control" type="date" id="Date" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DueDays"></label>
+        <input asp-for="DueDays" class="form-control" type="number" id="DueDays" />
+        <span asp-validation-for="DueDays" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DueDate"></label>
+        <input asp-for="DueDate" class="form-control" type="date" id="DueDate" readonly />
+        <span asp-validation-for="DueDate" class="text-danger"></span>
+    </div>
+    @if (ViewBag.Party != null)
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.Party)
+            <br />
+            @Html.DropDownListFor(m => m.Party, new SelectList(ViewBag.Party), "Select Party", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Party, "", new { @class = "text-danger" })
+        </div>
+    }
+    @if (ViewBag.Item != null)
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.Item)
+            <br />
+            @Html.DropDownListFor(m => m.Item, new SelectList(ViewBag.Item), "Select Item", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Item, "", new { @class = "text-danger" })
+        </div>
+    }
+    <div class="form-group">
+        <label asp-for="Qty"></label>
+        <input asp-for="Qty" class="form-control" id="Qty" />
+        <span asp-validation-for="Qty" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Rate"></label>
+        <input asp-for="Rate" class="form-control" id="Rate" />
+        <span asp-validation-for="Rate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Amount"></label>
+        <input asp-for="Amount" class="form-control" id="Amount" />
+        <span asp-validation-for="Amount" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Discount"></label>
+        <input asp-for="Discount" class="form-control" id="Discount" />
+        <span asp-validation-for="Discount" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="TotalAmount"></label>
+        <input asp-for="TotalAmount" class="form-control" id="TotalAmount" readonly />
+        <span asp-validation-for="TotalAmount" class="text-danger"></span>
+    </div>
+    <br />
+        <button type="submit" class="btn btn-primary">Checkout</button>
+}
+</form>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const dateInput = document.getElementById("Date");
+        const dueDaysInput = document.getElementById("DueDays");
+        const dueDateInput = document.getElementById("DueDate");
+        const discountInput = document.getElementById("Discount");
+        const rateInput = document.getElementById("Rate");
+        const qtyInput = document.getElementById("Qty");
+        const amountInput = document.getElementById("Amount");
+        const totalAmountInput = document.getElementById("TotalAmount");
+
+        function updateDueDate() {
+            const dateValue = dateInput.value;
+            const dueDaysValue = parseInt(dueDaysInput.value, 10);
+
+            if (dateValue && !isNaN(dueDaysValue)) {
+                const date = new Date(dateValue);
+                date.setDate(date.getDate() + dueDaysValue);
+                const formattedDueDate = date.toISOString().split("T")[0];
+                dueDateInput.value = formattedDueDate;
+            } else {
+                dueDateInput.value = "";
+            }
+        }
+        updateDueDate();
+        dateInput.addEventListener("change", updateDueDate);
+        dueDaysInput.addEventListener("input", updateDueDate);
+
+        function updateAmountAndTotal() {
+            const rate = parseFloat(rateInput.value);
+            const qty = parseInt(qtyInput.value, 10);
+            const discount = parseFloat(discountInput.value);
+
+            if (!isNaN(rate) && !isNaN(qty) && !isNaN(discount)) {
+                const amount = rate * qty;
+                amountInput.value = amount.toFixed(2);
+
+                const discountAmount = (amount * discount) / 100;
+                const totalAmount = amount - discountAmount;
+                totalAmountInput.value = totalAmount.toFixed(2);
+            } else {
+                amountInput.value = "";
+                totalAmountInput.value = "";
+            }
+        }
+        updateAmountAndTotal();
+        rateInput.addEventListener("input", updateAmountAndTotal);
+        qtyInput.addEventListener("input", updateAmountAndTotal);
+        discountInput.addEventListener("input", updateAmountAndTotal);
+    });
+</script>

@@ -3,9 +3,6 @@ using AspNetCoreHero.ToastNotification.Extensions;
 using Stripe;
 using Stripe.Checkout;
 
-StripeConfiguration.ApiKey = "sk_test_51NXLakSI2vMSdrtvAxI3gcig704OgM6rqNhPhhZV48WE12UkqZMipN2HVbUrO5cDHLwersNS44MHwX8MQnmB66No0068bqPNYn";
-//var app = builder.Build();
-// Add services to the container.
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddControllersWithViews();

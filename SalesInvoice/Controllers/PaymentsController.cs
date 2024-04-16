@@ -17,7 +17,6 @@ namespace SalesInvoice.Controllers
 
         public PaymentsController(IConfiguration configuration)
         {
-            StripeConfiguration.ApiKey = "sk_test_51NXLakSI2vMSdrtvAxI3gcig704OgM6rqNhPhhZV48WE12UkqZMipN2HVbUrO5cDHLwersNS44MHwX8MQnmB66No0068bqPNYn";
             _configuration = configuration;
         }
         [HttpGet]
